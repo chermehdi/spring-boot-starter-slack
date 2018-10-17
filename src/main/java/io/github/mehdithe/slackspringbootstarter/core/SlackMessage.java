@@ -14,4 +14,6 @@ public interface SlackMessage {
   String getMessage();
 
   String getChannel();
+
+  boolean isMarkdown();
 }

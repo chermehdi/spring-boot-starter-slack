@@ -3,18 +3,15 @@ package io.github.mehdithe.slackspringbootstarter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.mehdithe.slackspringbootstarter.configuration.SlackConfiguration;
-import io.github.mehdithe.slackspringbootstarter.core.SlackProperties;
+import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
 import java.util.concurrent.Executor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,22 +19,56 @@ public class SlackSpringBootStarterApplicationTests {
 
   ApplicationContextRunner runner;
 
-  SlackProperties props;
-
   @Before
   public void setup() {
-    runner = new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
-        SlackConfiguration.class));
-    props = new SlackProperties();
-    props.setAsync(true);
+    runner = new ApplicationContextRunner();
   }
 
   @Test
-  public void defaultServiceBacksOff() {
-    this.runner.withUserConfiguration(SlackConfiguration.class)
+  public void mustHaveWebHookUrl() {
+    this.runner
+        .withPropertyValues("slack.web-hook-url=url")
+        .withUserConfiguration(SlackConfiguration.class)
+        .run((context) -> {
+          assertThat(context).hasSingleBean(SlackNotifier.class);
+        });
+    this.runner
+        .withUserConfiguration(SlackConfiguration.class)
+        .run((context) -> {
+          assertThat(context).doesNotHaveBean(SlackNotifier.class);
+        });
+
+  }
+
+  @Test
+  public void hasThreadPoolConfigurationTest() {
+
+    this.runner
+        .withPropertyValues("slack.web-hook-url=url")
+        .withPropertyValues("slack.async=true")
+        .withUserConfiguration(SlackConfiguration.class)
         .run((context) -> {
           assertThat(context).hasSingleBean(Executor.class);
         });
+
+    this.runner
+        .withPropertyValues("slack.web-hook-url=url")
+        .withPropertyValues("slack.async=false")
+        .withUserConfiguration(SlackConfiguration.class)
+        .run((context) -> {
+          assertThat(context).doesNotHaveBean(Executor.class);
+        });
   }
 
+  @Test
+  public void hasRestTemplateTest() {
+
+    this.runner
+        .withPropertyValues("slack.web-hook-url=url")
+        .withUserConfiguration(SlackConfiguration.class)
+        .run((context) -> {
+          assertThat(context).hasSingleBean(RestTemplate.class);
+        });
+
+  }
 }
