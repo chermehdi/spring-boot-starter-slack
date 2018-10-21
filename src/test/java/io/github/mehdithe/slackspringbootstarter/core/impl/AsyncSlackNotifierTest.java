@@ -13,13 +13,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource("classpath:application.properties")
-public class DefaultSlackNotifierTest {
+@TestPropertySource("classpath:application-async.properties")
+public class AsyncSlackNotifierTest {
 
   @MockBean
   SlackNotifier notifier;
 
   @Test
   public void send() {
+    System.out.println(notifier);
   }
 }

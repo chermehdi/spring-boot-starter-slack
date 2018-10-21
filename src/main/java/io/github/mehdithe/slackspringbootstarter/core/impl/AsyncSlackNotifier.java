@@ -3,6 +3,7 @@ package io.github.mehdithe.slackspringbootstarter.core.impl;
 import io.github.mehdithe.slackspringbootstarter.core.SlackMessage;
 import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
 import io.github.mehdithe.slackspringbootstarter.core.SlackProperties;
+import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,27 +13,30 @@ import org.springframework.web.client.RestTemplate;
 /**
  * @author mehdithe
  */
-public class DefaultSlackNotifier implements SlackNotifier {
+public class AsyncSlackNotifier implements SlackNotifier {
 
-  final SlackProperties configuration;
+  final Executor threadPool;
 
   final RestTemplate restClient;
 
+  final SlackProperties configuration;
+
   Logger logger = LoggerFactory.getLogger(getClass());
 
-  public DefaultSlackNotifier(SlackProperties configuration,
-      RestTemplate restClient) {
+  public AsyncSlackNotifier(Executor threadPool,
+      RestTemplate restTemplate,
+      SlackProperties configuration) {
+    this.threadPool = threadPool;
+    this.restClient = restTemplate;
     this.configuration = configuration;
-    this.restClient = restClient;
   }
 
   @Override
   public void send(SlackMessage message) {
-    MessageWrapper wrappedMessage = MessageWrapper.from(message);
-    sendSync(wrappedMessage);
+    threadPool.execute(() -> sendAsync(MessageWrapper.from(message)));
   }
 
-  private void sendSync(MessageWrapper message) {
+  private void sendAsync(MessageWrapper message) {
     ResponseEntity<MessageWrapper> response = restClient
         .postForEntity(configuration.getWebHookUrl(), message, MessageWrapper.class);
     if (response.getStatusCode() != HttpStatus.OK) {
@@ -41,4 +45,3 @@ public class DefaultSlackNotifier implements SlackNotifier {
     }
   }
 }
-

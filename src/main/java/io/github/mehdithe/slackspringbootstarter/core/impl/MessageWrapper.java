@@ -26,6 +26,7 @@ public class MessageWrapper implements SlackMessage {
     wrapper.setMarkdown(message.isMarkdown());
     wrapper.setChannel(message.getChannel());
     wrapper.setText(message.getMessage());
+    wrapper.setUsername(message.getUserName());
     return wrapper;
   }
 

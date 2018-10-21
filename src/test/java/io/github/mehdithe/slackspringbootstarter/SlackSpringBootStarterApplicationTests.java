@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.mehdithe.slackspringbootstarter.configuration.SlackConfiguration;
 import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
+import io.github.mehdithe.slackspringbootstarter.core.impl.AsyncSlackNotifier;
+import io.github.mehdithe.slackspringbootstarter.core.impl.DefaultSlackNotifier;
 import java.util.concurrent.Executor;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,11 +47,13 @@ public class SlackSpringBootStarterApplicationTests {
   public void hasThreadPoolConfigurationTest() {
 
     this.runner
-        .withPropertyValues("slack.web-hook-url=url")
-        .withPropertyValues("slack.async=true")
+        .withPropertyValues("slack.web-hook-url=url", "slack.async=true")
         .withUserConfiguration(SlackConfiguration.class)
         .run((context) -> {
           assertThat(context).hasSingleBean(Executor.class);
+          assertThat(context).hasSingleBean(SlackNotifier.class);
+          SlackNotifier notifier = context.getBean(SlackNotifier.class);
+          Assert.assertTrue(notifier instanceof AsyncSlackNotifier);
         });
 
     this.runner
@@ -57,6 +62,8 @@ public class SlackSpringBootStarterApplicationTests {
         .withUserConfiguration(SlackConfiguration.class)
         .run((context) -> {
           assertThat(context).doesNotHaveBean(Executor.class);
+          assertThat(context).hasSingleBean(SlackNotifier.class);
+          Assert.assertTrue(context.getBean(SlackNotifier.class) instanceof DefaultSlackNotifier);
         });
   }
 

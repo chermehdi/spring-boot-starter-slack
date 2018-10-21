@@ -2,6 +2,7 @@ package io.github.mehdithe.slackspringbootstarter.configuration;
 
 import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
 import io.github.mehdithe.slackspringbootstarter.core.SlackProperties;
+import io.github.mehdithe.slackspringbootstarter.core.impl.AsyncSlackNotifier;
 import io.github.mehdithe.slackspringbootstarter.core.impl.DefaultSlackNotifier;
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -51,8 +52,16 @@ public class SlackConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  public SlackNotifier slackNotifier(SlackProperties configuration) {
+  @ConditionalOnProperty(name = "async", prefix = "slack", havingValue = "true")
+  public SlackNotifier asyncSlackNotifier(SlackProperties configuration) {
     Objects.requireNonNull(configuration);
+    return new AsyncSlackNotifier(threadPool(), restTemplate(), configuration);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public SlackNotifier syncSlackNotifier(SlackProperties configuration) {
     return new DefaultSlackNotifier(configuration, restTemplate());
   }
+
 }
