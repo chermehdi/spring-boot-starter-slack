@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.mehdithe.slackspringbootstarter.configuration.SlackConfiguration
+  io.github.chermehdi.slackspringbootstarter.configuration.SlackConfiguration

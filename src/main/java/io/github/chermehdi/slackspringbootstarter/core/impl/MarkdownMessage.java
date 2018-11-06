@@ -1,9 +1,9 @@
-package io.github.mehdithe.slackspringbootstarter.core.impl;
+package io.github.chermehdi.slackspringbootstarter.core.impl;
 
-import io.github.mehdithe.slackspringbootstarter.core.Message;
+import io.github.chermehdi.slackspringbootstarter.core.Message;
 
 /**
- * @author mehdithe
+ * @author chermehdi
  */
 public class MarkdownMessage implements Message {
 
@@ -21,5 +21,10 @@ public class MarkdownMessage implements Message {
   @Override
   public String getContent() {
     return content;
+  }
+
+  @Override
+  public boolean isMarkdown() {
+    return true;
   }
 }

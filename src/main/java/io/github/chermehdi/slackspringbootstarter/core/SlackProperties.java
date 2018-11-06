@@ -1,9 +1,9 @@
-package io.github.mehdithe.slackspringbootstarter.core;
+package io.github.chermehdi.slackspringbootstarter.core;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author mehdithe
+ * @author chermehdi
  */
 @ConfigurationProperties(prefix = "slack")
 public class SlackProperties {

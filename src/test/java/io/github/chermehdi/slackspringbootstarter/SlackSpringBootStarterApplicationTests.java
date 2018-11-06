@@ -1,11 +1,11 @@
-package io.github.mehdithe.slackspringbootstarter;
+package io.github.chermehdi.slackspringbootstarter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.mehdithe.slackspringbootstarter.configuration.SlackConfiguration;
-import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
-import io.github.mehdithe.slackspringbootstarter.core.impl.AsyncSlackNotifier;
-import io.github.mehdithe.slackspringbootstarter.core.impl.DefaultSlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.configuration.SlackConfiguration;
+import io.github.chermehdi.slackspringbootstarter.core.SlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.impl.AsyncSlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.impl.DefaultSlackNotifier;
 import java.util.concurrent.Executor;
 import org.junit.Assert;
 import org.junit.Before;

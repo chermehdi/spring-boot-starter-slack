@@ -1,4 +1,4 @@
-package io.github.mehdithe.slackspringbootstarter.core;
+package io.github.chermehdi.slackspringbootstarter.core;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

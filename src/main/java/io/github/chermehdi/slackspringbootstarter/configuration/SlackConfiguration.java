@@ -1,9 +1,9 @@
-package io.github.mehdithe.slackspringbootstarter.configuration;
+package io.github.chermehdi.slackspringbootstarter.configuration;
 
-import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
-import io.github.mehdithe.slackspringbootstarter.core.SlackProperties;
-import io.github.mehdithe.slackspringbootstarter.core.impl.AsyncSlackNotifier;
-import io.github.mehdithe.slackspringbootstarter.core.impl.DefaultSlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.SlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.SlackProperties;
+import io.github.chermehdi.slackspringbootstarter.core.impl.AsyncSlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.impl.DefaultSlackNotifier;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * General configuration for beans needed by the slack notifier library
  *
- * @author mehdithe
+ * @author chermehdi
  */
 @Configuration
 @ConditionalOnProperty(prefix = "slack", name = "web-hook-url")
@@ -50,6 +50,15 @@ public class SlackConfiguration {
     return new RestTemplate();
   }
 
+  /**
+   * Creates a SlackNotifier based on the configuration found on the application.properties file if
+   * the async flag is set ot true this method will be invoked and an @{AsyncSlackNotifier} will be
+   * created for you
+   *
+   * @param configuration the @{SlackProperties} configuration parsed from the
+   * application.properties
+   * @return the created SlackNotifier
+   */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnProperty(name = "async", prefix = "slack", havingValue = "true")
@@ -58,10 +67,18 @@ public class SlackConfiguration {
     return new AsyncSlackNotifier(threadPool(), restTemplate(), configuration);
   }
 
+  /**
+   * Creates a SlackNotifier based on the configuration found on the application.properties file if
+   * the async flag is set ot false or not set at all this method will be invoked and an
+   *
+   * @param configuration the @{SlackProperties} configuration parsed from the
+   * application.properties
+   * @return the created SlackNotifier
+   * @{DefaultSlackNotifier} will be created for you
+   */
   @Bean
   @ConditionalOnMissingBean
   public SlackNotifier syncSlackNotifier(SlackProperties configuration) {
     return new DefaultSlackNotifier(configuration, restTemplate());
   }
-
 }

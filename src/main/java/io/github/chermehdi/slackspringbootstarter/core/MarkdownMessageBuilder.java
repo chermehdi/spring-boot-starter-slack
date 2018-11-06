@@ -1,9 +1,11 @@
-package io.github.mehdithe.slackspringbootstarter.core;
+package io.github.chermehdi.slackspringbootstarter.core;
 
-import io.github.mehdithe.slackspringbootstarter.core.impl.MarkdownMessage;
+import io.github.chermehdi.slackspringbootstarter.core.impl.MarkdownMessage;
 
 /**
- * @author mehdithe
+ * a simple utitity builder to build a MarkdownMessage easily without knowing markdown syntax
+ *
+ * @author chermehdi
  */
 public class MarkdownMessageBuilder {
 

@@ -1,8 +1,8 @@
-package io.github.mehdithe.slackspringbootstarter.core.impl;
+package io.github.chermehdi.slackspringbootstarter.core.impl;
 
-import io.github.mehdithe.slackspringbootstarter.core.SlackMessage;
-import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
-import io.github.mehdithe.slackspringbootstarter.core.SlackProperties;
+import io.github.chermehdi.slackspringbootstarter.core.Message;
+import io.github.chermehdi.slackspringbootstarter.core.SlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.SlackProperties;
 import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author mehdithe
+ * Sends messages to the Slack configured workspace asynchronously, via the configured ThreadPool
+ *
+ * @author chermehdi
  */
 public class AsyncSlackNotifier implements SlackNotifier {
 
@@ -32,16 +34,17 @@ public class AsyncSlackNotifier implements SlackNotifier {
   }
 
   @Override
-  public void send(SlackMessage message) {
-    threadPool.execute(() -> sendAsync(MessageWrapper.from(message)));
+  public void send(Message message) {
+    threadPool.execute(() -> sendAsync(MessageWrapper.from(message, configuration)));
   }
 
   private void sendAsync(MessageWrapper message) {
-    ResponseEntity<MessageWrapper> response = restClient
-        .postForEntity(configuration.getWebHookUrl(), message, MessageWrapper.class);
+    ResponseEntity<String> response = restClient
+        .postForEntity(configuration.getWebHookUrl(), message, String.class);
     if (response.getStatusCode() != HttpStatus.OK) {
       logger.error("Could not send the message to the given channel, received status {}",
           response.getStatusCode());
     }
   }
+
 }

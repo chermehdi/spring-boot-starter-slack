@@ -1,6 +1,6 @@
-package io.github.mehdithe.slackspringbootstarter.core.impl;
+package io.github.chermehdi.slackspringbootstarter.core.impl;
 
-import io.github.mehdithe.slackspringbootstarter.core.SlackNotifier;
+import io.github.chermehdi.slackspringbootstarter.core.SlackNotifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,14 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource("classpath:application-async.properties")
-public class AsyncSlackNotifierTest {
+@TestPropertySource("classpath:application.properties")
+public class DefaultSlackNotifierTest {
 
   @MockBean
   SlackNotifier notifier;
 
   @Test
   public void send() {
-    System.out.println(notifier);
   }
 }

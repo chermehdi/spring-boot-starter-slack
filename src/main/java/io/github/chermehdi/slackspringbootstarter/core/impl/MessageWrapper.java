@@ -1,9 +1,11 @@
-package io.github.mehdithe.slackspringbootstarter.core.impl;
+package io.github.chermehdi.slackspringbootstarter.core.impl;
 
-import io.github.mehdithe.slackspringbootstarter.core.SlackMessage;
+import io.github.chermehdi.slackspringbootstarter.core.Message;
+import io.github.chermehdi.slackspringbootstarter.core.SlackMessage;
+import io.github.chermehdi.slackspringbootstarter.core.SlackProperties;
 
 /**
- * @author mehdithe
+ * @author chermehdi
  */
 public class MessageWrapper implements SlackMessage {
 
@@ -20,13 +22,14 @@ public class MessageWrapper implements SlackMessage {
   public MessageWrapper() {
   }
 
-  public static MessageWrapper from(SlackMessage message) {
+
+  public static MessageWrapper from(Message message, SlackProperties configuration) {
     MessageWrapper wrapper = new MessageWrapper();
-    wrapper.setIcon(message.getIconUrl());
+    wrapper.setIcon(configuration.getIcon());
     wrapper.setMarkdown(message.isMarkdown());
-    wrapper.setChannel(message.getChannel());
-    wrapper.setText(message.getMessage());
-    wrapper.setUsername(message.getUserName());
+    wrapper.setChannel(configuration.getChannelName());
+    wrapper.setText(message.getContent());
+    wrapper.setUsername(configuration.getUsername());
     return wrapper;
   }
 
