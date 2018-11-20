@@ -65,6 +65,24 @@ public class MarkdownMessageBuilder {
     return this;
   }
 
+  public MarkdownMessageBuilder newLine() {
+    this.internalBuffer.append("\n");
+    return this;
+  }
+
+  public MarkdownMessageBuilder codeBlock(String code) {
+    this.internalBuffer.append("```\n").append(code).append("```\n");
+    return this;
+  }
+
+  public MarkdownMessageBuilder link(String link, String linkText) {
+    this.internalBuffer.append("<")
+        .append(link)
+        .append("|")
+        .append(linkText)
+        .append(">");
+    return this;
+  }
 
   public MarkdownMessage build() {
     return new MarkdownMessage(this.internalBuffer.toString());

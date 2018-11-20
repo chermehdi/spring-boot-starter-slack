@@ -1,5 +1,6 @@
 package io.github.chermehdi.slackspringbootstarter.integration;
 
+import io.github.chermehdi.slackspringbootstarter.core.MarkdownMessageBuilder;
 import io.github.chermehdi.slackspringbootstarter.core.SlackNotifier;
 import io.github.chermehdi.slackspringbootstarter.core.SlackProperties;
 import io.github.chermehdi.slackspringbootstarter.core.impl.TextMessage;
@@ -27,5 +28,6 @@ public class SlackNotifierITTest {
   @Test
   public void messageIsSentTest() {
     notifier.send(new TextMessage("hello world !"));
+    notifier.send(new MarkdownMessageBuilder().code("System.out.println").build());
   }
 }
